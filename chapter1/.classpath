@@ -59,6 +59,7 @@
 	<classpathentry kind="var" path="HADOOP_HOME/share/hadoop/common/lib/xmlenc-0.52.jar"/>
 	<classpathentry kind="var" path="HADOOP_HOME/share/hadoop/common/lib/xz-1.0.jar"/>
 	<classpathentry kind="var" path="HADOOP_HOME/share/hadoop/common/lib/zookeeper-3.4.5.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME"/>
 	<classpathentry kind="var" path="HADOOP_HOME/share/hadoop/yarn/hadoop-yarn-api-2.2.0.jar"/>
 	<classpathentry kind="var" path="HADOOP_HOME/share/hadoop/yarn/hadoop-yarn-applications-distributedshell-2.2.0.jar"/>
 	<classpathentry kind="var" path="HADOOP_HOME/share/hadoop/yarn/hadoop-yarn-applications-unmanaged-am-launcher-2.2.0.jar"/>
@@ -70,6 +71,6 @@
 	<classpathentry kind="var" path="HADOOP_HOME/share/hadoop/yarn/hadoop-yarn-server-tests-2.2.0.jar"/>
 	<classpathentry kind="var" path="HADOOP_HOME/share/hadoop/yarn/hadoop-yarn-server-web-proxy-2.2.0.jar"/>
 	<classpathentry kind="var" path="HADOOP_HOME/share/hadoop/yarn/hadoop-yarn-site-2.2.0.jar"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME"/>
+	<classpathentry kind="var" path="HADOOP_HOME"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
