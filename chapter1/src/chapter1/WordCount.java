@@ -29,7 +29,7 @@ public class WordCount {
   /**
    * <p>
    * The mapper extends from the org.apache.hadoop.mapreduce.Mapper interface. When Hadoop runs, 
-   * it receives each new line in the input files as an input to the mapper. The ÒmapÓ function 
+   * it receives each new line in the input files as an input to the mapper. The ï¿½mapï¿½ function 
    * tokenize the line, and for each token (word) emits (word,1) as the output.  </p>
    */
   public static class TokenizerMapper 
@@ -74,8 +74,8 @@ public class WordCount {
    * <li>Option1: You can compile the sample by ant from sample directory.  To do this, you need to have Apache Ant installed in your system. 
    * Otherwise, you can use the complied jar included with the source code. hange directory to HADOOP_HOME, and copy the hadoop-cookbook.jar to the HADOOP_HOME. 
    * Then run the command > bin/hadoop jar hadoop-cookbook.jar chapter1.WordCount input output.</li> 
-   * <li>As an optional step, copy the ÒinputÓ directory to the top level of the IDE based project (eclipse project) that you created for samples. Now you can run 
-   * the WordCount class directly from your IDE passing Òinput outputÓ as arguments. This will run the sample same as before. Running MapReduce Jobs from IDE in this manner is very useful 
+   * <li>As an optional step, copy the ï¿½inputï¿½ directory to the top level of the IDE based project (eclipse project) that you created for samples. Now you can run 
+   * the WordCount class directly from your IDE passing ï¿½input outputï¿½ as arguments. This will run the sample same as before. Running MapReduce Jobs from IDE in this manner is very useful 
    * for debugging your MapReduce Jobs. </li>
    * </ol> 
    * @param args
