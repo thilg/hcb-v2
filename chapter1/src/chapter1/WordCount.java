@@ -91,8 +91,10 @@ public class WordCount {
     Job job = new Job(conf, "word count");
     job.setJarByClass(WordCount.class);
     job.setMapperClass(TokenizerMapper.class);
-    //Uncomment this to 
+    
+    /**** Uncomment the following line to enable the Combiner ****/
     //job.setCombinerClass(IntSumReducer.class);
+    
     job.setReducerClass(IntSumReducer.class);
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(IntWritable.class);
