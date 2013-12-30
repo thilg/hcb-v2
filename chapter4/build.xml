@@ -1,0 +1,31 @@
+<project name="hcb-c4-samples" default="compile" basedir=".">
+	<property name="build" location="build" />
+	<property environment="env"/>
+
+	<path id="hadoop-classpath">
+		<fileset dir="${env.HADOOP_HOME}/share/hadoop/common">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${env.HADOOP_HOME}/share/hadoop/common/lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${env.HADOOP_HOME}/share/hadoop/mapreduce">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${env.HADOOP_HOME}/share/hadoop/yarn">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="compile">
+		<mkdir dir="${build}" />
+		<javac includeantruntime="false" srcdir="src" destdir="${build}">
+			<classpath refid="hadoop-classpath"/>
+		</javac>
+		<jar jarfile="hcb-c4-samples.jar" basedir="${build}"/>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build}" />
+	</target>
+</project>
