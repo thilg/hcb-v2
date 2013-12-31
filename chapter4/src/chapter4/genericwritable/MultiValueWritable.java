@@ -5,6 +5,12 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
+/**
+ * HTTP server log processing sample for the Chapter 4 of Hadoop MapReduce
+ * Cookbook. 
+ * 
+ * @author Thilina Gunarathne
+ */
 public class MultiValueWritable extends GenericWritable {
 
 	private static Class[] CLASSES =  new Class[]{

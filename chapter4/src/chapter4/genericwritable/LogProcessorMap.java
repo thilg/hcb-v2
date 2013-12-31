@@ -8,6 +8,12 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
+/**
+ * HTTP server log processing sample for the Chapter 4 of Hadoop MapReduce
+ * Cookbook. 
+ * 
+ * @author Thilina Gunarathne
+ */
 public class LogProcessorMap extends
 		Mapper<Object, Text, Text, MultiValueWritable> {
 	private Text userHostText = new Text();
@@ -26,6 +32,8 @@ public class LogProcessorMap extends
 
 		String userHost = matcher.group(1);
 		userHostText.set(userHost); 
+		
+		// output two value types...
 		String request = matcher.group(5);
 		requestText.set(request);	
 		int bytes = Integer.parseInt(matcher.group(7));

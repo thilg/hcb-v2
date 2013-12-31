@@ -6,7 +6,12 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Reducer;
 
-
+/**
+ * HTTP server log processing sample for the Chapter 4 of Hadoop MapReduce
+ * Cookbook. 
+ * 
+ * @author Thilina Gunarathne
+ */
 public class LogProcessorReduce extends
 		Reducer<Text,MultiValueWritable,Text,Text> {
    private Text result = new Text();

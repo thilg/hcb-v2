@@ -5,7 +5,12 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Partitioner;
 
-
+/**
+ * HTTP server log processing sample for the Chapter 4 of Hadoop MapReduce
+ * Cookbook. 
+ * 
+ * @author Thilina Gunarathne
+ */
 public class IPBasedPartitioner extends Partitioner<Text, IntWritable>{
 
 	@Override

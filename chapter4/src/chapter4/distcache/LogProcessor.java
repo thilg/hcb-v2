@@ -1,4 +1,6 @@
-package chapter4;
+package chapter4.distcache;
+
+import java.net.URI;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -13,7 +15,10 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+import chapter4.IPBasedPartitioner;
+import chapter4.LogFileInputFormat;
 import chapter4.LogProcessorMap.LOG_PROCESSOR_COUNTER;
+import chapter4.LogProcessorReduce;
 
 /**
  * HTTP server log processing sample for the Chapter 4 of Hadoop MapReduce
@@ -29,7 +34,6 @@ import chapter4.LogProcessorMap.LOG_PROCESSOR_COUNTER;
  * 
  */
 public class LogProcessor extends Configured implements Tool {
-	
 	public static void main(String[] args) throws Exception {
 		int res = ToolRunner.run(new Configuration(), new LogProcessor(), args);
 		System.exit(res);
@@ -49,6 +53,8 @@ public class LogProcessor extends Configured implements Tool {
 		int numReduce = Integer.parseInt(args[2]);
 
 		Job job = Job.getInstance(getConf(), "log-analysis");
+
+		job.addCacheArchive(new URI("/user/thilina/ip2locationdb.tar.gz#ip2locationdb"));
 
 		job.setJarByClass(LogProcessor.class);
 		job.setMapperClass(LogProcessorMap.class);

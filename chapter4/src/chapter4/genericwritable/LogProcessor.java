@@ -9,7 +9,12 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-
+/**
+ * HTTP server log processing sample for the Chapter 4 of Hadoop MapReduce
+ * Cookbook. 
+ * 
+ * @author Thilina Gunarathne
+ */
 public class LogProcessor extends Configured implements Tool {
 	public static void main(String[] args) throws Exception {
 		int res = ToolRunner.run(new Configuration(), new LogProcessor(),

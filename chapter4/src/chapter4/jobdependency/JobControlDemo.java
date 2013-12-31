@@ -19,6 +19,12 @@ import chapter4.LogFileInputFormat;
 import chapter4.LogProcessorMap;
 import chapter4.LogProcessorReduce;
 
+/**
+ * HTTP server log processing sample for the Chapter 4 of Hadoop MapReduce
+ * Cookbook. 
+ * 
+ * @author Thilina Gunarathne
+ */
 public class JobControlDemo extends Configured implements Tool{
 	public static void main(String[] args) throws Exception {
 		int res = ToolRunner.run(new Configuration(), new JobControlDemo(),
