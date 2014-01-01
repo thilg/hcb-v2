@@ -51,7 +51,7 @@ public class LogFileRecordReader  extends RecordReader<LongWritable, LogWritable
 		
 		value = new LogWritable();
 		value.set(userIP, timestamp, request,
-				status, bytes);
+				bytes,status);
 		return true;
 	}
 	

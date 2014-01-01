@@ -34,7 +34,6 @@ public class LogWritable implements WritableComparable<LogWritable> {
 		this.responseSize.set(bytes);
 		this.status.set(status);	
 	}
-	
 
 	@Override
 	public void readFields(DataInput in) throws IOException {
@@ -71,26 +70,19 @@ public class LogWritable implements WritableComparable<LogWritable> {
 		return userIP;
 	}
 
-
 	public Text getTimestamp() {
 		return timestamp;
 	}
-
 
 	public Text getRequest() {
 		return request;
 	}
 
-
 	public IntWritable getResponseSize() {
 		return responseSize;
 	}
 
-
 	public IntWritable getStatus() {
 		return status;
 	}
-
-
-
 }

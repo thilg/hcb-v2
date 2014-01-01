@@ -88,7 +88,7 @@ public class WordCount {
       System.err.println("Usage: wordcount <in> <out>");
       System.exit(2);
     }
-    Job job = new Job(conf, "word count");
+    Job job = Job.getInstance(conf, "word count");
     job.setJarByClass(WordCount.class);
     job.setMapperClass(TokenizerMapper.class);
     
