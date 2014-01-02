@@ -35,7 +35,6 @@ public class LogProcessorReduce extends
 			mos.write("timestamps", key, val.getTimestamp());
 		}
 		result.set(sum);
-		context.write(key, result);
 		mos.write("responsesizes", key, result);
 	}
 }
