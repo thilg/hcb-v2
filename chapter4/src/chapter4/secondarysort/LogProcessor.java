@@ -12,8 +12,8 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import chapter4.LogFileInputFormat;
 import chapter4.LogWritable;
+import chapter4.inputformat.LogFileInputFormat;
 
 /**
  * HTTP server log processing sample for the Chapter 4 of Hadoop MapReduce
@@ -53,15 +53,21 @@ public class LogProcessor extends Configured implements Tool {
 		job.setJarByClass(LogProcessor.class);
 		job.setMapperClass(LogProcessorMap.class);
 		job.setReducerClass(LogProcessorReduce.class);
+		job.setNumReduceTasks(numReduce);
+		
 		job.setMapOutputKeyClass(SecondarySortWritable.class);
 		job.setMapOutputValueClass(LogWritable.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
+		
 		job.setInputFormatClass(LogFileInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
 		FileInputFormat.setInputPaths(job, new Path(inputPath));
 		FileOutputFormat.setOutputPath(job, new Path(outputPath));
-		job.setNumReduceTasks(numReduce);
+		
+		// group and partition by the visitor address
+		job.setPartitionerClass(SingleFieldPartitioner.class);
+		job.setGroupingComparatorClass(GroupingComparator.class);
 
 		int exitStatus = job.waitForCompletion(true) ? 0 : 1;
 

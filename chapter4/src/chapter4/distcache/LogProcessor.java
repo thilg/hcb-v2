@@ -7,18 +7,14 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Counter;
-import org.apache.hadoop.mapreduce.Counters;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import chapter4.IPBasedPartitioner;
-import chapter4.LogFileInputFormat;
-import chapter4.LogProcessorMap.LOG_PROCESSOR_COUNTER;
 import chapter4.LogProcessorReduce;
+import chapter4.LogWritable;
 
 /**
  * HTTP server log processing sample for the Chapter 4 of Hadoop MapReduce
@@ -34,6 +30,7 @@ import chapter4.LogProcessorReduce;
  * 
  */
 public class LogProcessor extends Configured implements Tool {
+	
 	public static void main(String[] args) throws Exception {
 		int res = ToolRunner.run(new Configuration(), new LogProcessor(), args);
 		System.exit(res);
@@ -53,27 +50,24 @@ public class LogProcessor extends Configured implements Tool {
 		int numReduce = Integer.parseInt(args[2]);
 
 		Job job = Job.getInstance(getConf(), "log-analysis");
-
+		
 		job.addCacheArchive(new URI("/user/thilina/ip2locationdb.tar.gz#ip2locationdb"));
 
 		job.setJarByClass(LogProcessor.class);
 		job.setMapperClass(LogProcessorMap.class);
 		job.setReducerClass(LogProcessorReduce.class);
+		job.setNumReduceTasks(numReduce);
+	
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(LogWritable.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
-		job.setInputFormatClass(LogFileInputFormat.class);
-		job.setPartitionerClass(IPBasedPartitioner.class);
+		
 		FileInputFormat.setInputPaths(job, new Path(inputPath));
 		FileOutputFormat.setOutputPath(job, new Path(outputPath));
-		job.setNumReduceTasks(numReduce);
-		// job.setOutputFormatClass(SequenceFileOutputFormat.class);
-
+		
 		int exitStatus = job.waitForCompletion(true) ? 0 : 1;
 
-		Counters counters = job.getCounters();
-		Counter badRecordsCounter = counters
-				.findCounter(LOG_PROCESSOR_COUNTER.BAD_RECORDS);
-		System.out.println("# of Bad Records :" + badRecordsCounter.getValue());
 		return exitStatus;
 	}
 }

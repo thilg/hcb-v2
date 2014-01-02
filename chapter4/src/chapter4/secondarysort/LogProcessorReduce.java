@@ -20,8 +20,8 @@ public class LogProcessorReduce extends
 
 	public void reduce(SecondarySortWritable key, Iterable<LogWritable> values,
 			Context context) throws IOException, InterruptedException {
-		for (LogWritable val : values) {
-			visitorAddress.set(val.getUserIP());
+		visitorAddress.set(key.getVisitorAddress());
+		for (LogWritable val : values) {			
 			context.write(visitorAddress, val.getResponseSize());
 		}
 	}

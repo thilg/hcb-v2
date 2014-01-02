@@ -15,9 +15,9 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import chapter4.LogFileInputFormat;
 import chapter4.LogProcessorMap;
 import chapter4.LogProcessorReduce;
+import chapter4.inputformat.LogFileInputFormat;
 
 /**
  * HTTP server log processing sample for the Chapter 4 of Hadoop MapReduce
@@ -46,7 +46,7 @@ public class JobControlDemo extends Configured implements Tool{
 		int numReduce = Integer.parseInt(args[2]); 
 		
 
-		Job job1 = new Job(getConf(), "log-grep");
+		Job job1 = Job.getInstance(getConf(), "log-grep");
 		job1.setJarByClass(RegexMapper.class);
 		job1.setMapperClass(RegexMapper.class);	
 	    job1.setOutputKeyClass(Text.class);
@@ -55,7 +55,7 @@ public class JobControlDemo extends Configured implements Tool{
 		FileOutputFormat.setOutputPath(job1, new Path(intPath));		
 		job1.setNumReduceTasks(0);	
 
-		Job job2 = new Job(getConf(), "log-analysis");
+		Job job2 = Job.getInstance(getConf(), "log-analysis");
 		job2.setJarByClass(LogProcessorMap.class);
 		job2.setMapperClass(LogProcessorMap.class);
 		job2.setReducerClass(LogProcessorReduce.class);

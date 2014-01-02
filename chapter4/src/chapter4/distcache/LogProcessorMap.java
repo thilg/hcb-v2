@@ -3,8 +3,10 @@ package chapter4.distcache;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
@@ -16,15 +18,9 @@ import chapter4.LogWritable;
  * 
  * @author Thilina Gunarathne
  */
-public class LogProcessorMap extends
-		Mapper<Object, LogWritable, Text, IntWritable> {
-
-	public static enum LOG_PROCESSOR_COUNTER {
-		BAD_RECORDS, PROCCESSED_RECORDS
-	};
-
-	// Uncomment the following to execute the DistributedCache example
-
+public class LogProcessorMap extends Mapper<LongWritable, Text, Text, LogWritable > {
+	LogWritable outValue = new LogWritable();
+	Text outKey = new Text();
 	URI[] localCachePath;
 
 	public void setup(Context context) throws IOException {
@@ -41,12 +37,28 @@ public class LogProcessorMap extends
 			}
 		}
 	}
-
-	public void map(Object key, LogWritable value, Context context)
+	
+	public void map(Object key, Text value, Context context)
 			throws IOException, InterruptedException {
-		context.getCounter(LOG_PROCESSOR_COUNTER.BAD_RECORDS).increment(1);
+		String logEntryPattern = "^(\\S+) (\\S+) (\\S+) \\[([\\w:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) (\\d+)";
 
-		// make bytes longWritable and output two value types...
-		context.write(value.getUserIP(), value.getResponseSize());
+		Pattern p = Pattern.compile(logEntryPattern);
+		Matcher matcher = p.matcher(value.toString());
+		if (!matcher.matches()) {
+			System.err.println("Bad Record : "+value);
+			return;
+		}
+		
+		String userIP = matcher.group(1);
+		String timestamp = matcher.group(4);
+		String request = matcher.group(5);
+		int status = Integer.parseInt(matcher.group(6));
+		int bytes = Integer.parseInt(matcher.group(7));
+		
+		outKey.set(userIP);
+		outValue.set(userIP, timestamp, request,
+				bytes,status);
+		context.write(outKey,outValue);
 	}
+	
 }

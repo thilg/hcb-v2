@@ -1,4 +1,4 @@
-package chapter4;
+package chapter4.inputformat;
 import java.io.IOException;
 
 import org.apache.hadoop.io.LongWritable;
@@ -6,6 +6,8 @@ import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+
+import chapter4.LogWritable;
 
 /**
  * HTTP server log processing sample for the Chapter 4 of Hadoop MapReduce

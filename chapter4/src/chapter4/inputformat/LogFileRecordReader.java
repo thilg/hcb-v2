@@ -1,4 +1,4 @@
-package chapter4;
+package chapter4.inputformat;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -8,6 +8,8 @@ import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.LineRecordReader;
+
+import chapter4.LogWritable;
 
 /**
  * HTTP server log processing sample for the Chapter 4 of Hadoop MapReduce

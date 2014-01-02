@@ -12,14 +12,14 @@ import org.apache.hadoop.mapreduce.Reducer;
  * @author Thilina Gunarathne
  */
 public class LogProcessorReduce extends
-		Reducer<Text,IntWritable,Text,IntWritable> {
+		Reducer<Text,LogWritable,Text,IntWritable> {
    private IntWritable result = new IntWritable();
 
-   public void reduce(Text key, Iterable<IntWritable> values, 
+   public void reduce(Text key, Iterable<LogWritable> values, 
                       Context context) throws IOException, InterruptedException {
      int sum = 0;
-     for (IntWritable val : values) {
-       sum += val.get();
+     for (LogWritable val : values) {
+       sum += val.getResponseSize().get();
      }
      result.set(sum);
      context.write(key, result);
