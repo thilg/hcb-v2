@@ -13,7 +13,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import chapter4.LogProcessorReduce;
+import chapter4.LogWritable;
 import chapter4.inputformat.LogFileInputFormat;
 import chapter4.inputformat.LogProcessorMap;
 
@@ -57,6 +57,8 @@ public class LogProcessor extends Configured implements Tool {
 		job.setReducerClass(LogProcessorReduce.class);
 		job.setNumReduceTasks(numReduce);
 		
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(LogWritable.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
 		

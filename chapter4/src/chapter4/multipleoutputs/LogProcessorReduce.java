@@ -31,10 +31,16 @@ public class LogProcessorReduce extends
 		int sum = 0;
 		for (LogWritable val : values) {
 			sum += val.getResponseSize().get();
-			
+
 			mos.write("timestamps", key, val.getTimestamp());
 		}
 		result.set(sum);
 		mos.write("responsesizes", key, result);
+	}
+
+	@Override
+	public void cleanup(Context context) throws IOException,
+			InterruptedException {
+		mos.close();
 	}
 }
