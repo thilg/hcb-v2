@@ -27,7 +27,7 @@
 
 	<target name="print-cp">
 		<property name="classpath" refid="hadoop-classpath" />
-		<echo message="classpath= ${classpath}" />
+		<echo message="export CLASSPATH= ${classpath}" />
 	</target>
 
 	<target name="clean">

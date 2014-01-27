@@ -1,10 +1,15 @@
 // Following is a libhdfs sample adapted from the src/c++/libhdfs/hdfs_write.c of the Hadoop distribution.
 
 #include "hdfs.h" 
+#include "stdio.h"
+#include "stdlib.h" 
+#include "strings.h" 
+#include "string.h"
+
 
 int main(int argc, char **argv) {
     
-    hdfsFS fs = hdfsConnect("namenode_hostname",namenode_port);
+    hdfsFS fs = hdfsConnect("namenode_hostname",HDFS_PORT);
     if (!fs) {
         fprintf(stderr, "Cannot connect to HDFS.\n");
         exit(-1);
