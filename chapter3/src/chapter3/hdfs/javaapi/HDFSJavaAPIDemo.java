@@ -7,9 +7,11 @@ import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
-/* This sample demostrate use of HDFS Java API
+/* This sample demonstrate use of HDFS Java API
  * This sample is loosely based on the 
  * http://wiki.apache.org/hadoop/HadoopDfsReadWriteExample
+ * 
+ * @author Thilina Gunarathne
 */
 
 public class HDFSJavaAPIDemo {
@@ -17,9 +19,9 @@ public class HDFSJavaAPIDemo {
 	public static void main(String[] args) throws IOException {
 		Configuration conf = new Configuration();
 		conf.addResource(new Path(
-				"/u/hadoop-1.0.2/conf/core-site.xml"));
+				"/etc/hadoop/core-site.xml"));
 		conf.addResource(new Path(
-				"/u/hadoop-1.0.2/conf/hdfs-site.xml"));
+				"/etc/hadoop/hdfs-site.xml"));
 
 		FileSystem fileSystem = FileSystem.get(conf);
 		System.out.println(fileSystem.getUri());
