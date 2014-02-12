@@ -20,6 +20,8 @@ import org.apache.hadoop.util.ToolRunner;
 /**
  * Find number of owner and replies received by each thread
  * 
+ * Sample data can be downloaded from http://tomcat.apache.org/mail/dev/
+ * 
  * @author Srinath Perera (hemapani@apache.org)
  * @author Thilina Gunarathne (thilina@apache.org)
  */
