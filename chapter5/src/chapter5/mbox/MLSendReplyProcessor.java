@@ -2,7 +2,7 @@
  * Following sample is adopted from original wordcount sample from 
  * http://wiki.apache.org/hadoop/WordCount. 
  */
-package chapter5;
+package chapter5.mbox;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;

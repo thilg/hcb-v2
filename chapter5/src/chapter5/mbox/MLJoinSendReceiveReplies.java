@@ -1,4 +1,4 @@
-package chapter5;
+package chapter5.mbox;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
