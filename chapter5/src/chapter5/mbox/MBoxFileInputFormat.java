@@ -11,8 +11,9 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 /**
  * Used to read Mbox files 
  * @author Srinath Perera (hemapani@apache.org)
+ * @author Thilina Gunarathne (thilina@apache.org)
  */
-public class MboxFileFormat extends FileInputFormat<Text, Text>{
+public class MBoxFileInputFormat extends FileInputFormat<Text, Text>{
     private MBoxFileReader boxFileReader = null; 
    
     @Override
