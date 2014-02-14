@@ -19,7 +19,8 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 /**
- * Sorts the number of hits received by each URL
+ * Calculates the Mean, Max and Min of the files served by a web 
+ * server by analysing the web server logs.
  * 
  * @author Srinath Perera (hemapani@apache.org)
  * @author Thilina Gunarathne (thilina@apache.org)

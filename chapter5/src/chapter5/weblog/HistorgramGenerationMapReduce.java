@@ -87,7 +87,7 @@ public class HistorgramGenerationMapReduce extends Configured implements Tool {
 					context.write(new IntWritable(hour), one);
 				}
 			} catch (ParseException e) {
-				// we ignore if there is few misformatted entries
+				// Ignore any misformatted entries
 				e.printStackTrace();
 			}
 		}
