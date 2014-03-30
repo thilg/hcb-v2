@@ -1,4 +1,4 @@
-package chapter7;
+package chapter8;
 
 import java.io.DataInput;
 import java.io.DataOutput;

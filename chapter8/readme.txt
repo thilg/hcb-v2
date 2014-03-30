@@ -1,4 +1,4 @@
-Source package for Chapter 7 : Hadoop Cookbook
+Source package for Chapter 8 : Hadoop Cookbook
 
 Pre-requisites
 ==============

@@ -1,49 +1,31 @@
-<project name="C7Samples" default="build"  basedir=".">
-
-	<property environment="env"/>	
-	<property name="src" location="src" />
-	<property name="build" location="build" />	
+<project name="hcb-c6-samples" default="compile" basedir=".">
+	<property name="build" location="build" />
+	<property environment="env"/>
 
 	<path id="hadoop-classpath">
-		<fileset dir="${env.HADOOP_HOME}/lib">
+		<fileset dir="${env.HADOOP_HOME}/share/hadoop/common">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="${env.HADOOP_HOME}">
-			<include name="hadoop-*.jar" />
-		</fileset>
-	</path>
-				
-	<path id="hbase-classpath">		
-		<fileset dir="${env.HADOOP_HOME}/lib">
+		<fileset dir="${env.HADOOP_HOME}/share/hadoop/common/lib">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="${env.HADOOP_HOME}">
-			<include name="hadoop-*.jar" />
-		</fileset>
-		<fileset dir="${env.HBASE_HOME}/lib">
+		<fileset dir="${env.HADOOP_HOME}/share/hadoop/mapreduce">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="${env.HBASE_HOME}">
-			<include name="hbase-*.jar" />
+		<fileset dir="${env.HADOOP_HOME}/share/hadoop/yarn">
+			<include name="**/*.jar" />
 		</fileset>
 	</path>
 
-	<target name="init">
+	<target name="compile">
 		<mkdir dir="${build}" />
-		<mkdir dir="${build}/classes" />
-	</target>
-
-	<target name="build" depends="init" description="compile the source">
-		<javac srcdir="${src}" destdir="${build}/classes" includeantruntime="false" excludes="chapter5/KMeanSample.java">
-			<classpath>
-				<path refid="hbase-classpath" />
-			</classpath>
+		<javac includeantruntime="false" srcdir="src" destdir="${build}">
+			<classpath refid="hadoop-classpath"/>
 		</javac>
-		<jar jarfile="${build}/c7-samples.jar" basedir="${build}/classes" />
+		<jar jarfile="hcb-c5-samples.jar" basedir="${build}"/>
 	</target>
 
-	<target name="clean" description="clean up">
+	<target name="clean">
 		<delete dir="${build}" />
 	</target>
-
 </project>

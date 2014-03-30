@@ -1,13 +1,14 @@
-package chapter7;
+package chapter8;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -15,10 +16,9 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-public class InvertedIndexer {
+public class TextOutInvertedIndexer {
 
 	/*
 	 * Map Function receives a chunk of an input document as the input and
@@ -35,7 +35,6 @@ public class InvertedIndexer {
 				throws IOException, InterruptedException {
 			String valString = value.toString().replaceAll("[^a-zA-Z0-9]+"," ");
 			StringTokenizer itr = new StringTokenizer(valString);
-
 			FileSplit fileSplit = (FileSplit) context.getInputSplit();
 			String fileName = fileSplit.getPath().getName();
 			while (itr.hasMoreTokens()) {
@@ -76,7 +75,7 @@ public class InvertedIndexer {
 	 * </p>
 	 */
 	public static class IndexingReducer extends
-			Reducer<Text, TermFrequencyWritable, Text, MapWritable> {
+			Reducer<Text, TermFrequencyWritable, Text, Text> {
 
 		public void reduce(Text key, Iterable<TermFrequencyWritable> values,
 				Context context) throws IOException, InterruptedException {
@@ -92,9 +91,14 @@ public class InvertedIndexer {
 				}
 			}
 
-			MapWritable outputMap = new MapWritable();
-			outputMap.putAll(map);
-			context.write(key, outputMap);
+			Iterator<Entry<Text, IntWritable>> it = map.entrySet().iterator();
+			StringBuilder strBuilder = new StringBuilder();
+			while (it.hasNext()) {
+				Entry<Text, IntWritable> pair = it.next();
+				strBuilder.append(pair.getKey() + ":" + pair.getValue() + ",");
+				it.remove(); // avoids a ConcurrentModificationException }
+			}
+			context.write(key, new Text(strBuilder.toString()));
 		}
 	}
 
@@ -125,18 +129,17 @@ public class InvertedIndexer {
 		String[] otherArgs = new GenericOptionsParser(conf, args)
 				.getRemainingArgs();
 		if (otherArgs.length != 2) {
-			System.err.println("Usage: InvertedIndexer <in> <out>");
+			System.err.println("Usage: TextOutInvertedIndexer <in> <out>");
 			System.exit(2);
 		}
 		Job job = new Job(conf, "Inverted Indexer");
-		job.setJarByClass(InvertedIndexer.class);
+		job.setJarByClass(TextOutInvertedIndexer.class);
 		job.setMapperClass(IndexingMapper.class);
 		job.setReducerClass(IndexingReducer.class);
 		job.setCombinerClass(IndexingCombiner.class);
 		job.setOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(TermFrequencyWritable.class);
-		job.setOutputValueClass(MapWritable.class);
-		job.setOutputFormatClass(SequenceFileOutputFormat.class);
+		job.setOutputValueClass(Text.class);
 		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
