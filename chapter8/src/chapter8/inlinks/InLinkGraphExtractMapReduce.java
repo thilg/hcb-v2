@@ -1,9 +1,10 @@
-package chapter8;
+package chapter8.inlinks;
 
 import java.io.IOException;
 import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Put;
@@ -15,12 +16,14 @@ import org.apache.hadoop.hbase.mapreduce.TableMapper;
 import org.apache.hadoop.hbase.mapreduce.TableReducer;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
 
 /**
  * Generate the InLinks graph from the Nutch 2.1 HBase data base.
  */
 
-public class InLinkGraphExtractor {
+public class InLinkGraphExtractMapReduce extends Configured implements Tool {
 
 	static class Mapper extends
 			TableMapper<ImmutableBytesWritable, ImmutableBytesWritable> {
@@ -58,10 +61,11 @@ public class InLinkGraphExtractor {
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
+	public int run(String[] args) throws Exception {
+
 		Configuration conf = HBaseConfiguration.create();
-		Job job = new Job(conf, "InLinkGraphExtractor");
-		job.setJarByClass(InLinkGraphExtractor.class);
+		Job job = Job.getInstance(conf, "InLinkGraphExtractor");
+		job.setJarByClass(InLinkGraphExtractMapReduce.class);
 		Scan scan = new Scan();
 		scan.addFamily("ol".getBytes());
 		// scan.setStopRow(...);
@@ -70,6 +74,11 @@ public class InLinkGraphExtractor {
 						ImmutableBytesWritable.class,
 						ImmutableBytesWritable.class, job);
 		TableMapReduceUtil.initTableReducerJob("linkdata", Reducer.class, job);
-		System.exit(job.waitForCompletion(true) ? 0 : 1);
+		return (job.waitForCompletion(true) ? 0 : 1);
+	}
+	
+	public static void main(String[] args) throws Exception {
+		int res = ToolRunner.run(new Configuration(), new InLinkGraphExtractMapReduce(), args);
+		System.exit(res);
 	}
 }
