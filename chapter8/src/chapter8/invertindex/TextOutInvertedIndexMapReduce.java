@@ -1,14 +1,15 @@
-package invertindex;
+package chapter8.invertindex;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -16,11 +17,10 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-public class InvertedIndexMapReduce extends Configured implements Tool {
+public class TextOutInvertedIndexMapReduce extends Configured implements Tool {
 
 	/*
 	 * Map Function receives a chunk of an input document as the input and
@@ -37,7 +37,6 @@ public class InvertedIndexMapReduce extends Configured implements Tool {
 				throws IOException, InterruptedException {
 			String valString = value.toString().replaceAll("[^a-zA-Z0-9]+"," ");
 			StringTokenizer itr = new StringTokenizer(valString);
-
 			FileSplit fileSplit = (FileSplit) context.getInputSplit();
 			String fileName = fileSplit.getPath().getName();
 			while (itr.hasMoreTokens()) {
@@ -78,7 +77,7 @@ public class InvertedIndexMapReduce extends Configured implements Tool {
 	 * </p>
 	 */
 	public static class IndexingReducer extends
-			Reducer<Text, TermFrequencyWritable, Text, MapWritable> {
+			Reducer<Text, TermFrequencyWritable, Text, Text> {
 
 		public void reduce(Text key, Iterable<TermFrequencyWritable> values,
 				Context context) throws IOException, InterruptedException {
@@ -94,9 +93,14 @@ public class InvertedIndexMapReduce extends Configured implements Tool {
 				}
 			}
 
-			MapWritable outputMap = new MapWritable();
-			outputMap.putAll(map);
-			context.write(key, outputMap);
+			Iterator<Entry<Text, IntWritable>> it = map.entrySet().iterator();
+			StringBuilder strBuilder = new StringBuilder();
+			while (it.hasNext()) {
+				Entry<Text, IntWritable> pair = it.next();
+				strBuilder.append(pair.getKey() + ":" + pair.getValue() + ",");
+				it.remove(); // avoids a ConcurrentModificationException }
+			}
+			context.write(key, new Text(strBuilder.toString()));
 		}
 	}
 
@@ -125,25 +129,25 @@ public class InvertedIndexMapReduce extends Configured implements Tool {
 	@Override
 	public int run(String[] args) throws Exception {
 		if (args.length != 2) {
-			System.err.println("Usage: InvertedIndexer <in> <out>");
+			System.err.println("Usage: TextOutInvertedIndexMapReduce <in> <out>");
 			System.exit(2);
 		}
-		Job job = Job.getInstance(getConf(), "InvertedIndexer");
-		job.setJarByClass(InvertedIndexMapReduce.class);
+		Job job = Job.getInstance(getConf(), "TextOutInvertedIndexer");
+		
+		job.setJarByClass(TextOutInvertedIndexMapReduce.class);
 		job.setMapperClass(IndexingMapper.class);
 		job.setReducerClass(IndexingReducer.class);
 		job.setCombinerClass(IndexingCombiner.class);
 		job.setOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(TermFrequencyWritable.class);
-		job.setOutputValueClass(MapWritable.class);
-		job.setOutputFormatClass(SequenceFileOutputFormat.class);
+		job.setOutputValueClass(Text.class);
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		return (job.waitForCompletion(true) ? 0 : 1);
 	}
 	
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(new Configuration(), new InvertedIndexMapReduce(), args);
+		int res = ToolRunner.run(new Configuration(), new TextOutInvertedIndexMapReduce(), args);
 		System.exit(res);
 	}
 }

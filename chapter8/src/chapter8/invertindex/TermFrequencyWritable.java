@@ -1,4 +1,4 @@
-package invertindex;
+package chapter8.invertindex;
 
 import java.io.DataInput;
 import java.io.DataOutput;
