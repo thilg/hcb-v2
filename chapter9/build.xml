@@ -15,9 +15,6 @@
 		<fileset dir="${env.HADOOP_HOME}/share/hadoop/yarn">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="/usr/lib/hbase">
-			<include name="**/*.jar" />
-		</fileset>
 	</path>
 
 	<target name="compile">
