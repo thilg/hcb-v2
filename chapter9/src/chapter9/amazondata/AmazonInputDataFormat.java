@@ -1,4 +1,4 @@
-package chapter8;
+package chapter9.amazondata;
 
 import java.io.IOException;
 
@@ -9,20 +9,20 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 
 /**
- * Used to read Mbox files 
  * @author Srinath Perera (hemapani@apache.org)
+ * @author Thilina Gunarathne
  */
-public class AmazonDataFormat extends FileInputFormat<Text, Text>{
-    private AmazonDataReader boxFileReader = null; 
+public class AmazonInputDataFormat extends FileInputFormat<Text, Text>{
+    private AmazonDataReader reader = null; 
         
    
     @Override
     public RecordReader<Text, Text> createRecordReader(
             InputSplit inputSplit, TaskAttemptContext attempt) throws IOException,
             InterruptedException {
-        boxFileReader = new AmazonDataReader();
-        boxFileReader.initialize(inputSplit, attempt);
-        return boxFileReader;
+        reader = new AmazonDataReader();
+        reader.initialize(inputSplit, attempt);
+        return reader;
     }
 
 }

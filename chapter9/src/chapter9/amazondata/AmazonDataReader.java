@@ -1,4 +1,4 @@
-package chapter8;
+package chapter9.amazondata;
 
 import java.io.BufferedReader;
 import java.io.IOException;

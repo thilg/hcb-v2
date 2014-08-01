@@ -1,4 +1,4 @@
-package chapter8.adwords;
+package chapter9.adwords;
 
 public class AdwordBidder {
     String clientID;

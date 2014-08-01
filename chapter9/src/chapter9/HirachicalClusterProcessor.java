@@ -1,4 +1,4 @@
-package chapter8;
+package chapter9;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+
+import chapter9.amazondata.AmazonCustomer;
 
 /**
  * This class implements the Hierarchical Clustering Algorithm

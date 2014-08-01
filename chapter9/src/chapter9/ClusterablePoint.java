@@ -1,4 +1,4 @@
-package chapter8;
+package chapter9;
 
 
 public interface ClusterablePoint {
