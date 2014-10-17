@@ -18,6 +18,12 @@
 		<fileset dir="/usr/lib/hbase">
 			<include name="**/*.jar" />
 		</fileset>
+		<fileset dir="/usr/lib/giraph">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="/usr/lib/hive-hcatalog/share/hcatalog/">
+			<include name="**/*.jar" />
+		</fileset>
 	</path>
 
 	<target name="compile">

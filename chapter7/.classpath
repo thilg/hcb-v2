@@ -154,5 +154,6 @@
 	<classpathentry kind="lib" path="/usr/lib/hive/lib/tempus-fugit-1.1.jar"/>
 	<classpathentry kind="lib" path="/usr/lib/hive/lib/xz-1.0.jar"/>
 	<classpathentry kind="lib" path="/usr/lib/hive/lib/zookeeper.jar"/>
+	<classpathentry kind="lib" path="/usr/lib/giraph/giraph.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
