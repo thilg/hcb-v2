@@ -1,0 +1,7 @@
+
+dependencies {
+    compile group: 'org.apache.hbase', name: 'hbase-common', version: '0.98.+'
+    compile group: 'org.apache.hbase', name: 'hbase-client', version: '0.98.+'
+    compile group: 'org.apache.hbase', name: 'hbase-server', version: '0.98.+'
+    compile group: 'org.apache.hcatalog', name: 'hcatalog-core', version: '0.11.+'
+}

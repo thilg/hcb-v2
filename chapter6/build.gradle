@@ -1,0 +1,6 @@
+
+
+dependencies {
+
+    compile group: 'org.apache.hive', name: 'hive-exec', version: '0.13.+'
+}
