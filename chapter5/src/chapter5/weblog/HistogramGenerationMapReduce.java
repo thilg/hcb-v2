@@ -29,10 +29,10 @@ import org.apache.hadoop.util.ToolRunner;
  * @author Thilina Gunarathne (thilina@apache.org)
  */
 
-public class HistorgramGenerationMapReduce extends Configured implements Tool {
+public class HistogramGenerationMapReduce extends Configured implements Tool {
 
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(new Configuration(), new HistorgramGenerationMapReduce(), args);
+		int res = ToolRunner.run(new Configuration(), new HistogramGenerationMapReduce(), args);
 		System.exit(res);
 	}
 
@@ -51,7 +51,7 @@ public class HistorgramGenerationMapReduce extends Configured implements Tool {
 			numReduce = Integer.parseInt(args[2]);
 
 		Job job = Job.getInstance(getConf(), "WeblogTimeOfDayHistogramCreator");
-		job.setJarByClass(HistorgramGenerationMapReduce.class);
+		job.setJarByClass(HistogramGenerationMapReduce.class);
 		job.setMapperClass(AMapper.class);
 		job.setReducerClass(AReducer.class);
 		job.setNumReduceTasks(numReduce);
