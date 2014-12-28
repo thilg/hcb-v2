@@ -1,6 +1,4 @@
-
-
 dependencies {
-
     compile group: 'org.apache.hive', name: 'hive-exec', version: '0.13.+'
+    compile group: 'org.apache.hcatalog', name: 'hcatalog-core', version: '0.11.+'
 }
