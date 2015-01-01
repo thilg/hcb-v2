@@ -1,4 +1,6 @@
+// Using a custom name for backward compatibility
+jar.archiveName = "hcb-c6-samples.jar"
+
 dependencies {
-    compile group: 'org.apache.hive', name: 'hive-exec', version: '0.13.+'
-    compile group: 'org.apache.hcatalog', name: 'hcatalog-core', version: '0.11.+'
+    compile group: 'org.apache.hive', name: 'hive-exec', version: '0.14.+'
 }
