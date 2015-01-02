@@ -23,7 +23,7 @@ import org.apache.hadoop.mapreduce.lib.partition.HashPartitioner;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-public class MapOutInvertedIndexMapReduce extends Configured implements Tool {
+public class MapFileOutInvertedIndexMR extends Configured implements Tool {
 
 	/*
 	 * Map Function receives a chunk of an input document as the input and
@@ -127,13 +127,13 @@ public class MapOutInvertedIndexMapReduce extends Configured implements Tool {
 	 */
 	@Override
 	public int run(String[] args) throws Exception {
-		if (args.length != 2) {
-			System.err.println("Usage: InvertedIndexer <in> <out>");
+		if (args.length != 3) {
+			System.err.println("Usage: InvertedIndexer <in> <out> <sample_lookup_term>");
 			System.exit(2);
 		}
 		
 		Job job = Job.getInstance(getConf(), "InvertedIndexer");
-		job.setJarByClass(MapOutInvertedIndexMapReduce.class);
+		job.setJarByClass(MapFileOutInvertedIndexMR.class);
 		job.setMapperClass(IndexingMapper.class);
 		job.setReducerClass(IndexingReducer.class);
 		job.setCombinerClass(IndexingCombiner.class);
@@ -155,14 +155,15 @@ public class MapOutInvertedIndexMapReduce extends Configured implements Tool {
 		
 		MapFile.Reader[] indexReaders = MapFileOutputFormat.getReaders(new Path(args[1]), getConf());
 		MapWritable value = new MapWritable();
-		Writable map = MapFileOutputFormat.getEntry(indexReaders, new HashPartitioner<Text, MapWritable>(), new Text("Apache"), value);
+		Text lookupKey = new Text(args[2]);
+		Writable map = MapFileOutputFormat.getEntry(indexReaders, new HashPartitioner<Text, MapWritable>(), lookupKey, value);
 		
 		System.out.println(((MapWritable)map).size());
 		return 0;
 	}
 	
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(new Configuration(), new MapOutInvertedIndexMapReduce(), args);
+		int res = ToolRunner.run(new Configuration(), new MapFileOutInvertedIndexMR(), args);
 		System.exit(res);
 	}
 }
