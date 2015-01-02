@@ -1,3 +1,5 @@
+// Using a custom name for backward compatibility
+jar.archiveName = "hcb-c8-samples.jar"
 
 dependencies {
     compile group: 'org.apache.hbase', name: 'hbase-common', version: '0.98.+'
