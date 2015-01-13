@@ -1,0 +1,2 @@
+// Using a custom name for backward compatibility
+jar.archiveName = "hcb-c9-samples.jar"
