@@ -15,8 +15,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.hcatalog.data.HCatRecord;
-import org.apache.hcatalog.mapreduce.HCatInputFormat;
+import org.apache.hive.hcatalog.data.HCatRecord;
+import org.apache.hive.hcatalog.mapreduce.HCatInputFormat;
 
 public class HCatReadMapReduce extends Configured implements Tool {
 
@@ -38,7 +38,7 @@ public class HCatReadMapReduce extends Configured implements Tool {
 		}
 	}
 
-	public static class Reduce extends
+	public static class UserReadReduce extends
 			Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
 
 		public void reduce(
@@ -69,7 +69,7 @@ public class HCatReadMapReduce extends Configured implements Tool {
 		Job job = Job.getInstance(getConf(), "HCatMapReduceSample");
 		job.setJarByClass(HCatReadMapReduce.class);
 		job.setMapperClass(UserReadMapper.class);
-		job.setReducerClass(Reduce.class);
+		job.setReducerClass(UserReadReduce.class);
 
 		// Set HCatalog as the InputFormat
 		job.setInputFormatClass(HCatInputFormat.class);
