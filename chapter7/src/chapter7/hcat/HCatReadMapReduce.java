@@ -65,9 +65,10 @@ public class HCatReadMapReduce extends Configured implements Tool {
 		String dbName = args[0];
 		String tableName = args[1];
 		String outputPath = args[2];
+		String jarLocation = args[3];
 
 		Job job = Job.getInstance(getConf(), "HCatMapReduceSample");
-		job.setJarByClass(HCatReadMapReduce.class);
+		job.setJar(jarLocation);
 		job.setMapperClass(UserReadMapper.class);
 		job.setReducerClass(UserReadReduce.class);
 
