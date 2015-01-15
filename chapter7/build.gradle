@@ -5,5 +5,19 @@ dependencies {
     compile group: 'org.apache.hbase', name: 'hbase-common', version: '0.98.+'
     compile group: 'org.apache.hbase', name: 'hbase-client', version: '0.98.+'
     compile group: 'org.apache.hbase', name: 'hbase-server', version: '0.98.+'
-    compile group: 'org.apache.hive.hcatalog', name: 'hive-hcatalog-core', version: '0.14.+'
+    compile group: 'org.apache.hive.hcatalog', name: 'hive-hcatalog-core', version: '0.13.+'
+}
+
+task executeHCatRead (type:JavaExec) {
+    main = "chapter7.hcat.HCatReadMapReduce"
+    classpath = sourceSets.main.runtimeClasspath 
+    args 'bookcrossing', 'users', 'hcat-read-out'
+    
+}
+
+task executeHCatWrite (type:JavaExec) {
+    main = "chapter7.hcat.HCatWriteMapReduce"
+    classpath = sourceSets.main.runtimeClasspath 
+    standardOutput = System.out
+  	errorOutput = System.err
 }

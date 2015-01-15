@@ -1,0 +1,8 @@
+build
+bin
+.project
+.classpath
+.settings
+metastore_db
+*.log
+.pydev*
