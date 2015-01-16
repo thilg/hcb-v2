@@ -57,7 +57,7 @@ public class HCatWriteMapReduce extends Configured implements Tool {
 					count += val.get();
 				}
 				HCatRecord record = new DefaultHCatRecord(2);
-				record.set(0, key.toString());
+				record.set(0, key);
 				record.set(1, count);
 				context.write(null, record);
 			}
