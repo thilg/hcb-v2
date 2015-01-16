@@ -86,7 +86,7 @@ public class HCatWriteMapReduce extends Configured implements Tool {
 		HCatInputFormat.setInput(job, dbName, inTableName);
 
 		// Mapper emits a string as key and an integer as value
-		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputKeyClass(IntWritable.class);
 		job.setMapOutputValueClass(IntWritable.class);
 
 		// Ignore the key for the reducer output; emitting an HCatalog record as

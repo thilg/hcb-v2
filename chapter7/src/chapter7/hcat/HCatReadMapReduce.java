@@ -83,7 +83,7 @@ public class HCatReadMapReduce extends Configured implements Tool {
 		HCatInputFormat.setInput(job, dbName, tableName);
 
 		// Mapper emits a string as key and an integer as value
-		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputKeyClass(IntWritable.class);
 		job.setMapOutputValueClass(IntWritable.class);
 
 		job.setOutputKeyClass(IntWritable.class);
