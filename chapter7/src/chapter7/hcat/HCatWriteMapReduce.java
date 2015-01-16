@@ -15,6 +15,7 @@ import org.apache.hadoop.util.ToolRunner;
 import org.apache.hive.hcatalog.data.DefaultHCatRecord;
 import org.apache.hive.hcatalog.data.HCatRecord;
 import org.apache.hive.hcatalog.data.schema.HCatSchema;
+import org.apache.hive.hcatalog.mapreduce.HCatBaseInputFormat;
 import org.apache.hive.hcatalog.mapreduce.HCatInputFormat;
 import org.apache.hive.hcatalog.mapreduce.HCatOutputFormat;
 import org.apache.hive.hcatalog.mapreduce.OutputJobInfo;
@@ -33,7 +34,9 @@ public class HCatWriteMapReduce extends Configured implements Tool {
 				Mapper<WritableComparable, HCatRecord, IntWritable, IntWritable>.Context context)
 				throws IOException, InterruptedException {
 
-			int age = (Integer) value.get(2);
+			HCatSchema schema = HCatBaseInputFormat.getTableSchema(context
+					.getConfiguration());
+			int age = value.getInteger("age", schema);
 			// emit age and one for count
 			context.write(new IntWritable(age), ONE);
 		}
@@ -42,10 +45,8 @@ public class HCatWriteMapReduce extends Configured implements Tool {
 	public static class Reduce extends
 			Reducer<IntWritable, IntWritable, WritableComparable, HCatRecord> {
 
-		public void reduce(
-				IntWritable key,
-				Iterable<IntWritable> values,Context context)
-				throws IOException, InterruptedException {
+		public void reduce(IntWritable key, Iterable<IntWritable> values,
+				Context context) throws IOException, InterruptedException {
 			if (key.get() < 34 & key.get() > 18) {
 				int count = 0;
 				for (IntWritable val : values) {
@@ -58,7 +59,6 @@ public class HCatWriteMapReduce extends Configured implements Tool {
 			}
 		}
 	}
-
 
 	public int run(String[] args) throws Exception {
 
@@ -93,9 +93,9 @@ public class HCatWriteMapReduce extends Configured implements Tool {
 
 		HCatOutputFormat.setOutput(job,
 				OutputJobInfo.create(dbName, outTableName, null));
-		HCatSchema s = HCatOutputFormat.getTableSchema(getConf());
-		HCatOutputFormat.setSchema(job, s);
-
+		HCatSchema schema = HCatOutputFormat.getTableSchema(job.getConfiguration());
+		HCatOutputFormat.setSchema(job, schema);
+		
 		int exitStatus = job.waitForCompletion(true) ? 0 : 1;
 		return exitStatus;
 	}

@@ -16,6 +16,8 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.hive.hcatalog.data.HCatRecord;
+import org.apache.hive.hcatalog.data.schema.HCatSchema;
+import org.apache.hive.hcatalog.mapreduce.HCatBaseInputFormat;
 import org.apache.hive.hcatalog.mapreduce.HCatInputFormat;
 
 public class HCatReadMapReduce extends Configured implements Tool {
@@ -32,7 +34,9 @@ public class HCatReadMapReduce extends Configured implements Tool {
 				Mapper<WritableComparable, HCatRecord, IntWritable, IntWritable>.Context context)
 				throws IOException, InterruptedException {
 
-			int age = (Integer) value.get(2);
+			HCatSchema schema = HCatBaseInputFormat.getTableSchema(context
+					.getConfiguration());
+			int age = value.getInteger("age", schema);
 			// emit age and one for count
 			context.write(new IntWritable(age), ONE);
 		}
@@ -74,7 +78,7 @@ public class HCatReadMapReduce extends Configured implements Tool {
 
 		// Set HCatalog as the InputFormat
 		job.setInputFormatClass(HCatInputFormat.class);
-		HCatInputFormat.setInput(job, dbName, tableName);
+		HCatInputFormat.setInput (job, dbName, tableName);
 
 		// Mapper emits a string as key and an integer as value
 		job.setMapOutputKeyClass(Text.class);
