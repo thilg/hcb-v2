@@ -36,9 +36,10 @@ public class HCatReadMapReduce extends Configured implements Tool {
 
 			HCatSchema schema = HCatBaseInputFormat.getTableSchema(context
 					.getConfiguration());
-			String ageString = value.getString("age", schema);
-			if (ageString != null && !(ageString).trim().equals("null")) {
-				int age = Integer.parseInt(ageString.trim());
+			// To avoid the "null" values in the age field of the User table
+			Object ageObject = value.get("age", schema);
+			if (ageObject instanceof Integer) {
+				int age = ((Integer) ageObject).intValue();
 				// emit age and one for count
 				context.write(new IntWritable(age), ONE);
 			}
