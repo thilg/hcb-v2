@@ -36,9 +36,12 @@ public class HCatWriteMapReduce extends Configured implements Tool {
 
 			HCatSchema schema = HCatBaseInputFormat.getTableSchema(context
 					.getConfiguration());
-			int age = value.getInteger("age", schema);
-			// emit age and one for count
-			context.write(new IntWritable(age), ONE);
+			String ageString = value.getString("age", schema);
+			if (ageString != null && !(ageString).trim().equals("null")) {
+				int age = Integer.parseInt(ageString.trim());
+				// emit age and one for count
+				context.write(new IntWritable(age), ONE);
+			}
 		}
 	}
 
@@ -93,9 +96,10 @@ public class HCatWriteMapReduce extends Configured implements Tool {
 
 		HCatOutputFormat.setOutput(job,
 				OutputJobInfo.create(dbName, outTableName, null));
-		HCatSchema schema = HCatOutputFormat.getTableSchema(job.getConfiguration());
+		HCatSchema schema = HCatOutputFormat.getTableSchema(job
+				.getConfiguration());
 		HCatOutputFormat.setSchema(job, schema);
-		
+
 		int exitStatus = job.waitForCompletion(true) ? 0 : 1;
 		return exitStatus;
 	}
