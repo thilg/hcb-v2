@@ -93,7 +93,7 @@ public class HCatWriteMapReduce extends Configured implements Tool {
 
 		HCatOutputFormat.setOutput(job,
 				OutputJobInfo.create(dbName, outTableName, null));
-		HCatSchema s = HCatOutputFormat.getTableSchema(job);
+		HCatSchema s = HCatOutputFormat.getTableSchema(getConf());
 		HCatOutputFormat.setSchema(job, s);
 
 		int exitStatus = job.waitForCompletion(true) ? 0 : 1;
