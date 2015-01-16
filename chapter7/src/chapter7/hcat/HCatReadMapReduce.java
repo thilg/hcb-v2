@@ -36,19 +36,19 @@ public class HCatReadMapReduce extends Configured implements Tool {
 
 			HCatSchema schema = HCatBaseInputFormat.getTableSchema(context
 					.getConfiguration());
-			int age = value.getInteger("age", schema);
-			// emit age and one for count
-			context.write(new IntWritable(age), ONE);
+			if (value != null) {
+				int age = value.getInteger("age", schema);
+				// emit age and one for count
+				context.write(new IntWritable(age), ONE);
+			}
 		}
 	}
 
 	public static class UserReadReduce extends
 			Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
 
-		public void reduce(
-				IntWritable key,
-				Iterable<IntWritable> values,Context context)
-				throws IOException, InterruptedException {
+		public void reduce(IntWritable key, Iterable<IntWritable> values,
+				Context context) throws IOException, InterruptedException {
 			if (key.get() < 34 & key.get() > 18) {
 				int count = 0;
 				for (IntWritable val : values) {
@@ -78,12 +78,11 @@ public class HCatReadMapReduce extends Configured implements Tool {
 
 		// Set HCatalog as the InputFormat
 		job.setInputFormatClass(HCatInputFormat.class);
-		HCatInputFormat.setInput (job, dbName, tableName);
+		HCatInputFormat.setInput(job, dbName, tableName);
 
 		// Mapper emits a string as key and an integer as value
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(IntWritable.class);
-
 
 		job.setOutputKeyClass(IntWritable.class);
 		job.setOutputValueClass(IntWritable.class);
@@ -98,8 +97,8 @@ public class HCatReadMapReduce extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(new Configuration(),
-				new HCatReadMapReduce(), args);
+		int res = ToolRunner.run(new Configuration(), new HCatReadMapReduce(),
+				args);
 		System.exit(res);
 	}
 }
