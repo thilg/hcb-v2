@@ -15,27 +15,4 @@ dependencies {
     compile group: 'org.apache.hbase', name: 'hbase-common', version: '0.98.+'
     compile group: 'org.apache.hbase', name: 'hbase-client', version: '0.98.+'
     compile group: 'org.apache.hbase', name: 'hbase-server', version: '0.98.+'
-    compile group: 'org.apache.hive.hcatalog', name: 'hive-hcatalog-core', version: '0.14.+'
-    compile group: 'org.apache.calcite', name: 'calcite-core', version: '0.9.2-incubating'
-    compile group: 'org.apache.calcite', name: 'calcite-avatica', version: '0.9.2-incubating'
-    compile group: 'org.pentaho', name: 'pentaho-aggdesigner-algorithm', version: '5.1.3-jhyde'
 }
-
-task executeHCatRead (type:JavaExec, dependsOn: 'build') {
-    main = "chapter7.hcat.HCatReadMapReduce"
-    sourceSets.main.runtimeClasspath  += files('/home/tgunarathne/test/hcb-v2/chapter7')	
-    classpath = sourceSets.main.runtimeClasspath 
-    args 'bookcrossing', 'users', 'hcat-read-out'
-}
-
-
-task uberjar(type: Jar) {
-    archiveName = "hcb-c7-samples-uber.jar"
-    from files(sourceSets.main.output.classesDir)
-    from {configurations.compile.collect {zipTree(it)}} {
-        exclude "META-INF/*.SF"
-        exclude "META-INF/*.DSA"
-        exclude "META-INF/*.RSA"
-    }
-}
-
