@@ -61,7 +61,6 @@ public class WordCountWithToolsTest {
 		reduceOutList.add(new Pair<Text, IntWritable>(new Text(
 				"Test"),new IntWritable(3)));
 		
-
 		reduceDriver.withAllOutput(reduceOutList);
 		reduceDriver.runTest();
 	}
