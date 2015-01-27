@@ -18,7 +18,9 @@ import org.apache.hadoop.util.ToolRunner;
 
 import chapter9.amazondata.AmazonCustomer;
 import chapter9.amazondata.AmazonCustomer.ItemData;
-
+/*
+* @author Srinath Perera (hemapani@apache.org)
+*/
 public class ContentBasedRecommendation extends Configured implements Tool {
 	public static void main(String[] args) throws Exception {
 		int res = ToolRunner.run(new Configuration(),
@@ -67,21 +69,21 @@ public class ContentBasedRecommendation extends Configured implements Tool {
 			AmazonCustomer amazonCustomer = new AmazonCustomer(value.toString()
 					.replaceAll("[0-9]+\\s+", ""));
 
-			List<String> recemndations = new ArrayList<String>();
-			for (ItemData itemData : amazonCustomer.itemsBrought) {
-				recemndations.addAll(itemData.similarItems);
+			List<String> recommendations = new ArrayList<String>();
+			for (ItemData itemData : amazonCustomer.itemsBought) {
+				recommendations.addAll(itemData.similarItems);
 			}
 
-			for (ItemData itemData : amazonCustomer.itemsBrought) {
-				recemndations.remove(itemData.itemID);
+			for (ItemData itemData : amazonCustomer.itemsBought) {
+				recommendations.remove(itemData.itemID);
 			}
 
-			ArrayList<String> finalRecemndations = new ArrayList<String>();
-			for (int i = 0; i < Math.min(10, recemndations.size()); i++) {
-				finalRecemndations.add(recemndations.get(i));
+			ArrayList<String> finalRecommendations = new ArrayList<String>();
+			for (int i = 0; i < Math.min(10, recommendations.size()); i++) {
+				finalRecommendations.add(recommendations.get(i));
 			}
 			context.write(new Text(amazonCustomer.customerID), new Text(
-					finalRecemndations.toString()));
+					finalRecommendations.toString()));
 		}
 	}
 

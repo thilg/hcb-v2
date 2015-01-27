@@ -5,7 +5,10 @@ import java.util.Random;
 
 import chapter9.amazondata.AmazonCustomer;
 import chapter9.amazondata.AmazonCustomer.ItemData;
-
+/**
+ * 
+ * @author Srinath Perera (hemapani@apache.org)
+ */
 public class SampleSalesDataGenerator {
 	public static void main(String[] args) throws Exception {
 		FileWriter w = new FileWriter("salessata.data");
@@ -19,7 +22,7 @@ public class SampleSalesDataGenerator {
 				itemData.itemID = String.valueOf(random.nextInt(10));
 				// itemData.rating = random.nextInt(10);
 				itemData.rating = 9;
-				customer.itemsBrought.add(itemData);
+				customer.itemsBought.add(itemData);
 			}
 
 			String custAsStr = customer.toString();

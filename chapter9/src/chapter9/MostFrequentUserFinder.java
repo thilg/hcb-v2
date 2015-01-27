@@ -23,7 +23,6 @@ import chapter9.amazondata.AmazonCustomer.ItemData;
 import chapter9.amazondata.AmazonInputDataFormat;
 
 /**
- * Find number of owner and replies received by each thread
  * 
  * @author Srinath Perera (hemapani@apache.org)
  */
@@ -58,13 +57,13 @@ public class MostFrequentUserFinder extends Configured implements Tool {
 
 			for (Text value : values) {
 				Set<ItemData> itemsBrought = new AmazonCustomer(
-						value.toString()).itemsBrought;
+						value.toString()).itemsBought;
 				for (ItemData itemData : itemsBrought) {
-					customer.itemsBrought.add(itemData);
+					customer.itemsBought.add(itemData);
 				}
 			}
-			if (customer.itemsBrought.size() > 5) {
-				context.write(new IntWritable(customer.itemsBrought.size()),
+			if (customer.itemsBought.size() > 5) {
+				context.write(new IntWritable(customer.itemsBought.size()),
 						new Text(customer.toString()));
 			}
 		}
@@ -72,7 +71,7 @@ public class MostFrequentUserFinder extends Configured implements Tool {
 
 	public static void main(String[] args) throws Exception {
 		int res = ToolRunner.run(new Configuration(),
-				new ClusterBasedRecommendation(), args);
+				new MostFrequentUserFinder(), args);
 		System.exit(res);
 	}
 

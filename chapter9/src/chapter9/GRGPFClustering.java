@@ -24,7 +24,8 @@ import org.apache.hadoop.util.ToolRunner;
 import chapter9.amazondata.AmazonCustomer;
 
 /**
- * This class implement the GRGPF Clustering Algorihtm
+ * This class implement the GRGPF Clustering Algorithm
+ * @author Srinath Perera (hemapani@apache.org)
  */
 
 public class GRGPFClustering extends Configured implements Tool {
