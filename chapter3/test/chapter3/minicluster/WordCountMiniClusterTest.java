@@ -47,7 +47,7 @@ public class WordCountMiniClusterTest {
 	}
 
 	@Test
-	public void testSimpleMSISDNSum() throws Exception {
+	public void testWordCountIntegration() throws Exception {
 		String outDirString = "build/word-count-test";
 		String testResDir = "test-resources";
 		String testInput = testResDir + "/wc-input.txt";
@@ -58,6 +58,8 @@ public class WordCountMiniClusterTest {
 
 		Job job = (new WordCountWithTools()).prepareJob(testInput,
 				outDirString, mrCluster.getConfig());
+		
+		// Make sure the job completes successfully
 		assertTrue(job.waitForCompletion(true));
 		validateCounters(job.getCounters(), 12, 367, 201, 201);
 	}
