@@ -21,11 +21,10 @@ dependencies {
     compile group: 'org.pentaho', name: 'pentaho-aggdesigner-algorithm', version: '5.1.3-jhyde'
 }
 
-task executeHCatRead (type:JavaExec, dependsOn: 'build') {
-    main = "chapter7.hcat.HCatReadMapReduce"
-    sourceSets.main.runtimeClasspath  += files('/home/tgunarathne/test/hcb-v2/chapter7')	
+task executeHBaseClient (type:JavaExec, dependsOn: 'build') {
+    main = "chapter7.hbase.HBaseClient"
     classpath = sourceSets.main.runtimeClasspath 
-    args 'bookcrossing', 'users', 'hcat-read-out'
+    args 'lyuba00:60000' 
 }
 
 

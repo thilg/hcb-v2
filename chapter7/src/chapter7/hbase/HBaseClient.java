@@ -16,29 +16,40 @@ import org.apache.hadoop.hbase.util.Bytes;
  *
  */
 public class HBaseClient {
-
+public static final String HBASE_CONFIGURATION_ZOOKEEPER_QUORUM                     = "hbase.zookeeper.quorum";
+public static final String HBASE_CONFIGURATION_ZOOKEEPER_CLIENTPORT                 = "hbase.zookeeper.property.clientPort";
     /**
      * @param args
      */
     public static void main(String[] args) throws Exception{
+
         
         //content to HBase
         Configuration conf = HBaseConfiguration.create();
-        conf.set("hbase.master","localhost:60000");
-        
+String hbaseZookeeperQuorum="lyuba00";
+String hbaseZookeeperClientPort="10000";
+conf.set(HBASE_CONFIGURATION_ZOOKEEPER_QUORUM, hbaseZookeeperQuorum);
+conf.set(HBASE_CONFIGURATION_ZOOKEEPER_CLIENTPORT, hbaseZookeeperClientPort);
+
+//        conf.set("hbase.master","lyuba00:60000");
+          System.out.println("1");
+      
         Configuration config = HBaseConfiguration.create();
         HTable table = new HTable(config, "test");
+        System.out.println("2");
         
         //put data
-        Put put = new Put("row1".getBytes());
+/*        Put put = new Put("row1".getBytes());
         put.add("cf".getBytes(), "b".getBytes(), "val2".getBytes());
         table.put(put);
-        
+                System.out.println("3");
+*/
         //read data
         Scan s = new Scan();
         s.addFamily(Bytes.toBytes("cf")); 
         ResultScanner results = table.getScanner(s);
-        
+               System.out.println("4");
+
         try {
             for(Result result: results){
                 KeyValue[] keyValuePairs = result.raw(); 
