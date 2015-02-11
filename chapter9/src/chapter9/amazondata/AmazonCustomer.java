@@ -6,12 +6,15 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import chapter9.ClusterablePoint;
-
+/**
+ * 
+ * @author Srinath Perera (hemapani@apache.org)
+ */
 public class AmazonCustomer implements ClusterablePoint {
 	public String customerID;
 	public String clusterID;
 
-	public Set<ItemData> itemsBrought = new TreeSet<ItemData>();;
+	public Set<ItemData> itemsBought = new TreeSet<ItemData>();;
 
 	public AmazonCustomer() {
 
@@ -30,7 +33,7 @@ public class AmazonCustomer implements ClusterablePoint {
 				} else if (key.equals("clusterID")) {
 					clusterID = value;
 				} else if (key.equals("review")) {
-					itemsBrought.add(new ItemData(value));
+					itemsBought.add(new ItemData(value));
 				} else {
 					System.out.println("Unknown token 1" + token + ",key='"
 							+ key + "' from the line '" + customerLine + "'");
@@ -80,7 +83,7 @@ public class AmazonCustomer implements ClusterablePoint {
 				itemData.group = group;
 				itemData.similarItems = similarItems;
 				amazonCustomer.customerID = customerID;
-				amazonCustomer.itemsBrought.add(itemData);
+				amazonCustomer.itemsBought.add(itemData);
 				list.add(amazonCustomer);
 			} else if (keyValue[0].equals("Id")) {
 
@@ -123,8 +126,8 @@ public class AmazonCustomer implements ClusterablePoint {
 		AmazonCustomer customer1 = (AmazonCustomer) this;
 		AmazonCustomer customer2 = (AmazonCustomer) other;
 
-		for (ItemData item1 : customer1.itemsBrought) {
-			for (ItemData item2 : customer2.itemsBrought) {
+		for (ItemData item1 : customer1.itemsBought) {
+			for (ItemData item2 : customer2.itemsBought) {
 				if (item1.equals(item2)) {
 					double ratingDiff = Math.abs(item1.rating - item2.rating);
 					if (ratingDiff < 5) {
@@ -242,7 +245,7 @@ public class AmazonCustomer implements ClusterablePoint {
 		if (clusterID != null) {
 			buf.append("clusterID").append("=").append(clusterID).append(",");
 		}
-		for (ItemData itemData : itemsBrought) {
+		for (ItemData itemData : itemsBought) {
 			buf.append("review=").append(itemData.toString()).append(",");
 		}
 		return buf.toString();
@@ -257,7 +260,7 @@ public class AmazonCustomer implements ClusterablePoint {
 		if (!customerID.equals(customer.customerID)) {
 			throw new RuntimeException("customer ID does not match");
 		}
-		if (itemsBrought.size() != customer.itemsBrought.size()) {
+		if (itemsBought.size() != customer.itemsBought.size()) {
 			throw new RuntimeException("Brought items does not match");
 		}
 	}

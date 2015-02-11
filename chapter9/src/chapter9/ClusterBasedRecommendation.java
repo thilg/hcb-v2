@@ -20,7 +20,9 @@ import org.apache.hadoop.util.ToolRunner;
 import chapter9.amazondata.AmazonCustomer;
 import chapter9.amazondata.AmazonCustomer.ItemData;
 import chapter9.amazondata.AmazonCustomer.SortableItemData;
-
+/*
+* @author Srinath Perera (hemapani@apache.org)
+*/
 public class ClusterBasedRecommendation extends Configured implements Tool {
 	public static void main(String[] args) throws Exception {
 		int res = ToolRunner.run(new Configuration(),
@@ -80,7 +82,7 @@ public class ClusterBasedRecommendation extends Configured implements Tool {
 			TreeSet<AmazonCustomer.SortableItemData> highestRated1000Items = new TreeSet<AmazonCustomer.SortableItemData>();
 			for (Text value : values) {
 				AmazonCustomer customer = new AmazonCustomer(value.toString());
-				for (ItemData itemData : customer.itemsBrought) {
+				for (ItemData itemData : customer.itemsBought) {
 					highestRated1000Items.add(customer.new SortableItemData(
 							itemData));
 					if (highestRated1000Items.size() > 1000) {
@@ -94,7 +96,7 @@ public class ClusterBasedRecommendation extends Configured implements Tool {
 			for (AmazonCustomer amazonCustomer : customerList) {
 				List<ItemData> recemndationList = new ArrayList<AmazonCustomer.ItemData>();
 				for (SortableItemData sortableItemData : highestRated1000Items) {
-					if (!amazonCustomer.itemsBrought
+					if (!amazonCustomer.itemsBought
 							.contains(sortableItemData.itemData)) {
 						recemndationList.add(sortableItemData.itemData);
 					}

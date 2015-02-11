@@ -26,7 +26,7 @@ import chapter9.amazondata.AmazonInputDataFormat;
  * 
  * @author Srinath Perera (hemapani@apache.org)
  */
-public class NaiveBayesProductClassifer extends Configured implements Tool {
+public class NaiveBayesProductClassifier extends Configured implements Tool {
 	public static class AMapper extends
 			Mapper<Object, Text, Text, BooleanWritable> {
 
@@ -40,7 +40,7 @@ public class NaiveBayesProductClassifer extends Configured implements Tool {
 			int similarItemCount = 0;
 
 			for (AmazonCustomer customer : customerList) {
-				ItemData itemData = customer.itemsBrought.iterator().next();
+				ItemData itemData = customer.itemsBought.iterator().next();
 				reviewCount++;
 				if (itemData.rating > 3) {
 					postiveReviews++;
@@ -135,7 +135,7 @@ public class NaiveBayesProductClassifer extends Configured implements Tool {
 			numReduce = Integer.parseInt(args[2]);
 
 		Job job = Job.getInstance(getConf(), "NavieBayesProductClassifer");
-		job.setJarByClass(NaiveBayesProductClassifer.class);
+		job.setJarByClass(NaiveBayesProductClassifier.class);
 		job.setMapperClass(AMapper.class);
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(BooleanWritable.class);

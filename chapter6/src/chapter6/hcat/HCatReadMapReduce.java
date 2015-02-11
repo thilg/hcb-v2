@@ -1,26 +1,26 @@
-package chapter7.hcat;
+package chapter6.hcat;
 
 import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.hive.hcatalog.data.DefaultHCatRecord;
 import org.apache.hive.hcatalog.data.HCatRecord;
 import org.apache.hive.hcatalog.data.schema.HCatSchema;
 import org.apache.hive.hcatalog.mapreduce.HCatBaseInputFormat;
 import org.apache.hive.hcatalog.mapreduce.HCatInputFormat;
-import org.apache.hive.hcatalog.mapreduce.HCatOutputFormat;
-import org.apache.hive.hcatalog.mapreduce.OutputJobInfo;
 
-public class HCatWriteMapReduce extends Configured implements Tool {
+public class HCatReadMapReduce extends Configured implements Tool {
 
 	public static class UserReadMapper extends
 			Mapper<WritableComparable, HCatRecord, IntWritable, IntWritable> {
@@ -46,8 +46,8 @@ public class HCatWriteMapReduce extends Configured implements Tool {
 		}
 	}
 
-	public static class Reduce extends
-			Reducer<IntWritable, IntWritable, WritableComparable, HCatRecord> {
+	public static class UserReadReduce extends
+			Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
 
 		public void reduce(IntWritable key, Iterable<IntWritable> values,
 				Context context) throws IOException, InterruptedException {
@@ -56,10 +56,7 @@ public class HCatWriteMapReduce extends Configured implements Tool {
 				for (IntWritable val : values) {
 					count += val.get();
 				}
-				HCatRecord record = new DefaultHCatRecord(2);
-				record.set(0, key.get());
-				record.set(1, count);
-				context.write(null, record);
+				context.write(key, new IntWritable(count));
 			}
 		}
 	}
@@ -67,46 +64,42 @@ public class HCatWriteMapReduce extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
 
 		if (args.length < 2) {
-			System.err
-					.println("Usage:  <dbname> <in-tablename> <out-tablename>");
+			System.err.println("Usage:  <dbname> <tablename> <outpath>");
 			System.exit(-1);
 		}
 		/* input parameters */
 		String dbName = args[0];
-		String inTableName = args[1];
-		String outTableName = args[2];
+		String tableName = args[1];
+		String outputPath = args[2];
+		String jarLocation = args[3];
 
 		Job job = Job.getInstance(getConf(), "HCatMapReduceSample");
-		job.setJarByClass(HCatWriteMapReduce.class);
+		job.setJar(jarLocation);
 		job.setMapperClass(UserReadMapper.class);
-		job.setReducerClass(Reduce.class);
+		job.setReducerClass(UserReadReduce.class);
 
 		// Set HCatalog as the InputFormat
 		job.setInputFormatClass(HCatInputFormat.class);
-		HCatInputFormat.setInput(job, dbName, inTableName);
+		HCatInputFormat.setInput(job, dbName, tableName);
 
 		// Mapper emits a string as key and an integer as value
 		job.setMapOutputKeyClass(IntWritable.class);
 		job.setMapOutputValueClass(IntWritable.class);
 
-		// Ignore the key for the reducer output; emitting an HCatalog record as
-		// value
-		job.setOutputKeyClass(WritableComparable.class);
-		job.setOutputValueClass(DefaultHCatRecord.class);
-		job.setOutputFormatClass(HCatOutputFormat.class);
+		job.setOutputKeyClass(IntWritable.class);
+		job.setOutputValueClass(IntWritable.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
 
-		HCatOutputFormat.setOutput(job,
-				OutputJobInfo.create(dbName, outTableName, null));
-		HCatSchema schema = HCatOutputFormat.getTableSchema(job
-				.getConfiguration());
-		HCatOutputFormat.setSchema(job, schema);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(Text.class);
+		FileOutputFormat.setOutputPath(job, new Path(outputPath));
 
 		int exitStatus = job.waitForCompletion(true) ? 0 : 1;
 		return exitStatus;
 	}
 
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(new Configuration(), new HCatWriteMapReduce(),
+		int res = ToolRunner.run(new Configuration(), new HCatReadMapReduce(),
 				args);
 		System.exit(res);
 	}

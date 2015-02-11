@@ -41,7 +41,7 @@ public class ClickRateApproximator extends Configured implements Tool {
 					return;
 				}
 				for (AmazonCustomer customer : customerList) {
-					itemData = customer.itemsBrought.iterator().next();
+					itemData = customer.itemsBought.iterator().next();
 					break;
 				}
 

@@ -1,0 +1,6 @@
+// Using a custom name for backward compatibility
+jar.archiveName = "hcb-c3-samples.jar"
+
+dependencies {
+  testCompile group: 'org.apache.mrunit', name: 'mrunit', version: '1.1.+',classifier: 'hadoop2'    
+}
