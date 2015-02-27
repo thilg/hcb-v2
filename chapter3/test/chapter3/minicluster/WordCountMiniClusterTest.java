@@ -64,6 +64,10 @@ public class WordCountMiniClusterTest {
 		validateCounters(job.getCounters(), 12, 367, 201, 201);
 	}
 	
+	
+	/**
+	 * Following integration test uses the Hadoop local mode for the execution
+	 */
 	@Test
 	public void testWordCountIntegrationLocalMode() throws Exception {
 		String outDirString = "build/word-count-test";
