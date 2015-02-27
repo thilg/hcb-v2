@@ -1,14 +1,13 @@
 package chapter3.minicluster;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hdfs.tools.GetConf;
 import org.apache.hadoop.mapred.MiniMRClientCluster;
 import org.apache.hadoop.mapred.MiniMRClientClusterFactory;
 import org.apache.hadoop.mapreduce.Counters;
@@ -57,7 +56,26 @@ public class WordCountMiniClusterTest {
 		FileUtils.deleteDirectory(outDir);
 
 		Job job = (new WordCountWithTools()).prepareJob(testInput,
-				outDirString, mrCluster.getConfig());
+				outDirString,new Configuration());
+				//mrCluster.getConfig());
+		
+		// Make sure the job completes successfully
+		assertTrue(job.waitForCompletion(true));
+		validateCounters(job.getCounters(), 12, 367, 201, 201);
+	}
+	
+	@Test
+	public void testWordCountIntegrationLocalMode() throws Exception {
+		String outDirString = "build/word-count-test";
+		String testResDir = "test-resources";
+		String testInput = testResDir + "/wc-input.txt";
+
+		// clean output dir
+		File outDir = new File(outDirString);
+		FileUtils.deleteDirectory(outDir);
+
+		Job job = (new WordCountWithTools()).prepareJob(testInput,
+				outDirString,new Configuration());
 		
 		// Make sure the job completes successfully
 		assertTrue(job.waitForCompletion(true));
