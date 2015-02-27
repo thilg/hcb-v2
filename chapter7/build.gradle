@@ -20,9 +20,14 @@ dependencies {
 task executeHBaseClient (type:JavaExec, dependsOn: 'build') {
     main = "chapter7.hbase.HBaseClient"
     classpath = sourceSets.main.runtimeClasspath 
-    args 'lyuba00:60000' 
+    args System.getProperty("exec.args").split() 
 }
 
+task executeHBaseClient (type:JavaExec, dependsOn: 'build') {
+    main = "chapter7.hbase.HDIDataUploader"
+    classpath = sourceSets.main.runtimeClasspath 
+    args System.getProperty("exec.args").split() 
+}
 
 task uberjar(type: Jar) {
     archiveName = "hcb-c7-samples-uber.jar"

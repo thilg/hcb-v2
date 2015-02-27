@@ -6,20 +6,17 @@ import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.KeyValue;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import utils.CSVLineParser;
 
 /**
- * This class read the data file from resources/chapter5/hdi-data.csv and upload the data to HBase running in the
- * local machine. 
+ * This class read the data file and upload the data to HBase 
  * @author srinath
+ * @author tgunarathne
  *
  */
 public class HDIDataUploader {
@@ -30,16 +27,35 @@ public class HDIDataUploader {
      * @param args
      */
     public static void main(String[] args) throws Exception {
+    	
+    	String hbaseZNode = "/hbase-unsecure";
+		String zQuorum = "localhost";
+        String fileName = "resources/hdi-data.csv";
 
-        Configuration conf = HBaseConfiguration.create();
-        //change here if you want to change the HBase installation. 
-        conf.set("hbase.master", "localhost:60000");
+		if (args.length == 2) {
+			zQuorum = args[0];
+			fileName = args[1];
+		} else if (args.length == 3) {
+			zQuorum = args[0];
+			fileName = args[1];
+			hbaseZNode = args[2];
+		} else {
+			System.out
+					.println("Usage: gradle executeHDIDataUpload "
+							+ "-Dexec.args=\"<One or more servers from Zookeeper Quorum> <hdi-data file> (root znode for HBase)\"");
+		}
 
-        Configuration config = HBaseConfiguration.create();
-        HTable table = new HTable(config, TABLE_NAME);
+		Configuration conf = HBaseConfiguration.create();
+		conf.clear();
+		conf.set("hbase.zookeeper.quorum", zQuorum);
+		// conf.set("hbase.zookeeper.property.clientPort","2181");
+		conf.set("zookeeper.znode.parent", hbaseZNode);
+		HBaseAdmin.checkHBaseAvailable(conf);
+		System.out.println("Connected to HBase");
 
-        //Change here if you want to change the input file. 
-        BufferedReader reader = new BufferedReader(new FileReader("resources/chapter5/hdi-data.csv"));
+        HTable table = new HTable(conf, TABLE_NAME);
+
+		BufferedReader reader = new BufferedReader(new FileReader(fileName));
 
         try {
             String line = null;
@@ -47,8 +63,6 @@ public class HDIDataUploader {
             reader.readLine();
             while ((line = reader.readLine()) != null) {
                 try {
-                    // line = line.replaceAll("\"(.*),(.*)\"", "$1 $2");
-
                     String[] tokens = CSVLineParser.tokenizeCSV(line).toArray(new String[0]);
                     String country = tokens[1];
                     double lifeExpectacny = Double.parseDouble(tokens[3].replaceAll(",", ""));
@@ -74,24 +88,8 @@ public class HDIDataUploader {
                 e1.printStackTrace();
             }
         }
-
-        //Following print back the results
-        Scan s = new Scan();
-        s.addFamily(Bytes.toBytes("ByCountry"));
-        ResultScanner results = table.getScanner(s);
-
-        try {
-            for (Result result : results) {
-                KeyValue[] keyValuePairs = result.raw();
-                System.out.println(new String(result.getRow()));
-                for (KeyValue keyValue : keyValuePairs) {
-                    System.out.println(new String(keyValue.getFamily()) + " " + new String(keyValue.getQualifier())
-                            + "=" + Bytes.toDouble(keyValue.getValue()));
-                }
-            }
-        } finally {
-            results.close();
-        }
+        
+        table.close();
     }
 
 }

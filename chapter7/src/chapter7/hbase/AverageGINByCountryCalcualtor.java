@@ -65,7 +65,7 @@ public class AverageGINByCountryCalcualtor {
 
     public static void main(String[] args) throws Exception {
         Configuration conf = HBaseConfiguration.create();
-        Job job = new Job(conf, "AverageGINByCountryCalcualtor");
+        Job job = Job.getInstance(conf,"AverageGINByCountryCalcualtor");
         job.setJarByClass(AverageGINByCountryCalcualtor.class);
         Scan scan = new Scan();
         scan.addFamily("ByCountry".getBytes());
