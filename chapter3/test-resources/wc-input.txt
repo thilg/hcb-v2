@@ -1,0 +1,12 @@
+The mission of the Apache Software Foundation (ASF) is to provide software for the public good. We do this by providing services and support for many for like-minded software project communities of individuals.
+What is the ASF?
+
+The Apache Software Foundation, a US 501(c)(3) non-profit corporation, provides organizational, legal, and financial support for a broad range of over 150 open source software projects. The Foundation provides an established framework for intellectual property and financial contributions that simultaneously limits potential legal exposure for our project committers. Through a collaborative and meritocratic development process known as The Apache Way, Apache™ projects deliver enterprise-grade, freely available software products that attract large communities of users. The pragmatic Apache License makes it easy for all users, commercial and individual, to deploy Apache products.
+How did the ASF and Apache™ projects grow?
+
+Formerly known as the Apache Group, the ASF was incorporated in 1999 as a membership-based, not-for-profit corporation in order to ensure that the Apache projects continue to exist beyond the participation of individual volunteers. Individuals who have demonstrated a commitment to collaborative open-source software development, through sustained participation and contributions within the Foundation's projects, are eligible for membership in the ASF. An individual is awarded membership after nomination and approval by a majority of the existing ASF members. Thus, the ASF is governed by the community it most directly serves -- the people collaborating within its projects.
+How are the ASF and Apache projects governed?
+
+The ASF members periodically elect a Board of Directors to manage the organizational affairs of the Foundation, as accorded by the ASF Bylaws. The Board, in turn, appoints a number of officers to oversee the day-to-day operations of the Foundation. A number of public records of our operation are made available to the community. A more detailed explanation of How the ASF works in terms of day to day operations is available, and the Apache Community Development project's goal is to help newcomers learn more about the Apache Software Foundation.
+
+Individual Apache projects are in turn governed directly by Project Management Committees (PMC) made up of individuals who have shown merit and leadership within those projects. There are detailed descriptions of ASF and project governance models.
