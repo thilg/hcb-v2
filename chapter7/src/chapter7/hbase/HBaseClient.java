@@ -35,7 +35,8 @@ public class HBaseClient {
 		} else {
 			System.out
 					.println("Usage: gradle executeHBaseClient "
-							+ "-Dexec.args=\"<One or more servers from Zookeeper Quorum> (root znode for HBase)\"");
+							+ "-Dexec.args=\"<One or more servers from Zookeeper Quorum> (root znode for HBase)\"\n");
+			System.out.println("Trying to proceed using the default values...\n\n");
 		}
 
 		Configuration conf = HBaseConfiguration.create();
@@ -46,8 +47,16 @@ public class HBaseClient {
 		conf.set("zookeeper.znode.parent", hbaseZNode);
 		HBaseAdmin.checkHBaseAvailable(conf);
 		System.out.println("Connected to HBase");
+		
+		HBaseAdmin admin = new HBaseAdmin(conf);
+		if (!admin.tableExists("test")){
+			System.out.println("Please create the 'test' table in HBase.");
+			System.exit(-1);
+		}
+		admin.close();
 
 		HTable table = new HTable(conf, "test");
+		
 
 		// putting data to HBase 
 		Put put = new Put("row1".getBytes());
