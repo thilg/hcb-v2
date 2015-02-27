@@ -1,4 +1,4 @@
-##hcb-v2 Chapter7 errata
+## Chapter7 errata
 -----------------------
 
 #### "Data random access using Java client APIs" recipe
