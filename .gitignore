@@ -6,3 +6,5 @@ bin
 metastore_db
 *.log
 .pydev*
+.gradle
+target

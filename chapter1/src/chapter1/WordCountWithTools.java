@@ -17,7 +17,7 @@ import chapter1.WordCount;
 import chapter1.WordCount.IntSumReducer;
 import chapter1.WordCount.TokenizerMapper;
 
-public class WordcountWithTools extends Configured implements Tool {
+public class WordCountWithTools extends Configured implements Tool {
 
     public int run(String[] args) throws Exception {
         if (args.length < 2) {
@@ -29,7 +29,7 @@ public class WordcountWithTools extends Configured implements Tool {
 
         System.out.println(Arrays.toString(args));
 
-        Job job = new Job(getConf(), "word count");
+        Job job = Job.getInstance(getConf(), "word count");
         job.setJarByClass(WordCount.class);
         job.setMapperClass(TokenizerMapper.class);
         // Uncomment this to
@@ -45,7 +45,7 @@ public class WordcountWithTools extends Configured implements Tool {
     }
 
     public static void main(String[] args) throws Exception {
-        int res = ToolRunner.run(new Configuration(), new WordcountWithTools(), args);
+        int res = ToolRunner.run(new Configuration(), new WordCountWithTools(), args);
         System.exit(res);
     }
 

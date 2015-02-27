@@ -1,8 +1,9 @@
 package chapter7.hbase;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.KeyValue;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
@@ -11,57 +12,66 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.util.Bytes;
 
 /**
- * Following shows how to connect to HBase from java. 
+ * Following shows how to connect to HBase from java.
+ * 
  * @author srinath
- *
+ * @author tgunarathne
  */
 public class HBaseClient {
-public static final String HBASE_CONFIGURATION_ZOOKEEPER_QUORUM                     = "hbase.zookeeper.quorum";
-public static final String HBASE_CONFIGURATION_ZOOKEEPER_CLIENTPORT                 = "hbase.zookeeper.property.clientPort";
-    /**
-     * @param args
-     */
-    public static void main(String[] args) throws Exception{
 
-        
-        //content to HBase
-        Configuration conf = HBaseConfiguration.create();
-String hbaseZookeeperQuorum="lyuba00";
-String hbaseZookeeperClientPort="10000";
-conf.set(HBASE_CONFIGURATION_ZOOKEEPER_QUORUM, hbaseZookeeperQuorum);
-conf.set(HBASE_CONFIGURATION_ZOOKEEPER_CLIENTPORT, hbaseZookeeperClientPort);
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) throws Exception {
 
-//        conf.set("hbase.master","lyuba00:60000");
-          System.out.println("1");
-      
-        Configuration config = HBaseConfiguration.create();
-        HTable table = new HTable(config, "test");
-        System.out.println("2");
-        
-        //put data
-/*        Put put = new Put("row1".getBytes());
-        put.add("cf".getBytes(), "b".getBytes(), "val2".getBytes());
-        table.put(put);
-                System.out.println("3");
-*/
-        //read data
-        Scan s = new Scan();
-        s.addFamily(Bytes.toBytes("cf")); 
-        ResultScanner results = table.getScanner(s);
-               System.out.println("4");
+		String hbaseZNode = "/hbase-unsecure";
+		String zQuorum = "localhost";
 
-        try {
-            for(Result result: results){
-                KeyValue[] keyValuePairs = result.raw(); 
-                System.out.println(new String(result.getRow()));
-                for(KeyValue keyValue: keyValuePairs){
-                    System.out.println( new String(keyValue.getFamily()) + " "+ new String(keyValue.getQualifier()) + "=" + new String(keyValue.getValue()));
-                }
-            }
-        } finally{
-            results.close();
-        }
-        
-    }
+		if (args.length == 1) {
+			zQuorum = args[0];
+		} else if (args.length == 2) {
+			zQuorum = args[0];
+			hbaseZNode = args[1];
+		} else {
+			System.out
+					.println("Usage: gradle executeHBaseClient "
+							+ "-Dexec.args=\"<One or more servers from Zookeeper Quorum> (root znode for HBase)\"");
+		}
+
+		Configuration conf = HBaseConfiguration.create();
+		conf.clear();
+
+		conf.set("hbase.zookeeper.quorum", zQuorum);
+		// conf.set("hbase.zookeeper.property.clientPort","2181");
+		conf.set("zookeeper.znode.parent", hbaseZNode);
+		HBaseAdmin.checkHBaseAvailable(conf);
+		System.out.println("Connected to HBase");
+
+		HTable table = new HTable(conf, "test");
+
+		// putting data to HBase 
+		Put put = new Put("row1".getBytes());
+		put.add("cf".getBytes(), "b".getBytes(), "val2".getBytes());
+		table.put(put);
+
+		// reading data from HBase
+		Scan s = new Scan();
+		s.addFamily(Bytes.toBytes("cf"));
+		ResultScanner results = table.getScanner(s);
+
+		try {
+			for (Result result : results) {
+				for (Cell keyValue : result.listCells()) {
+					System.out.println(new String(keyValue.getFamilyArray()) + " "
+							+ new String(keyValue.getQualifierArray()) + "="
+							+ new String(keyValue.getValueArray()));
+				}
+			}
+		} finally {
+			results.close();
+		}
+		
+		table.close();
+	}
 
 }
