@@ -20,13 +20,17 @@ dependencies {
 task executeHBaseClient (type:JavaExec, dependsOn: 'build') {
     main = "chapter7.hbase.HBaseClient"
     classpath = sourceSets.main.runtimeClasspath 
-    args System.getProperty("exec.args").split() 
+    def execArgs = System.getProperty('exec.args') 
+	if(execArgs)    
+   		args = execArgs.split()
 }
 
-task executeHBaseClient (type:JavaExec, dependsOn: 'build') {
+task executeHDIDataUpload (type:JavaExec, dependsOn: 'build') {
     main = "chapter7.hbase.HDIDataUploader"
     classpath = sourceSets.main.runtimeClasspath 
-    args System.getProperty("exec.args").split() 
+    def execArgs = System.getProperty('exec.args') 
+	if(execArgs)    
+   		args = execArgs.split()
 }
 
 task uberjar(type: Jar) {
