@@ -1,16 +1,25 @@
 ##hcb-v2 Chapter7 errata
-=====================
+-----------------------
 
-###Data random access using Java client APIs recipe
-  1. First follow the "Getting started with Apache HBase" recipe to create an HBase table names "test", before executing the "gradle executeHBaseClient" command for the "Data random access using Java client APIs" recipe. 
+#### "Data random access using Java client APIs" recipe
+  * First follow the "Getting started with Apache HBase" recipe to create an HBase table names "test", before executing the "gradle executeHBaseClient" command for the "Data random access using Java client APIs" recipe. 
 
-### Running MapReduce jobs on HBase recipe
-  1. First create two HBase tables named "HDI" and "HDIResult" as follows, before executing the "gradle executeHDIDataUpload" command for the "Running MapReduce jobs on HBase" recipe.
+#### "Running MapReduce jobs on HBase" recipe
+  * First create two HBase tables named "HDI" and "HDIResult" as follows, before executing the "gradle executeHDIDataUpload" command for the "Running MapReduce jobs on HBase" recipe.
 ```
 $ hbase shell
 hbase(main):001:0> create 'HDI','ByCountry'
 hbase(main):002:0> create 'HDIResult','data'
 ```
-  2. Use the following command to execute the MapReduce computation.
+  * Execute the `gradle build uberjar` command inside the chpater7 folder to create a jar with all the dependencies.
+```
+$ gradle build uberjar
+```
+  * Use the following command from the chapter7 folder to execute the MapReduce computation.
+```
+$ hadoop jar build/libs/hcb-c7-samples-uber.jar \
+chapter7.hbase.AverageGINByCountryCalculator \
+<One or more servers from Zookeeper Quorum> (root znode for HBase)
+```
 
 
