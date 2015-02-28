@@ -2,6 +2,8 @@ hcb-v2
 ======
 This is the sample source code repository for the ["Hadoop MapReduce v2 Cookbook - Second Edition"] (https://www.packtpub.com/big-data-and-business-intelligence/hadoop-mapreduce-v2-cookbook-second-edition)
 
+##### Please refer to the README.md in each chapter for ERRATA and corrections.
+
 Building
 ========
 This code uses Gradle to automate the compiling and building of the projects. 
